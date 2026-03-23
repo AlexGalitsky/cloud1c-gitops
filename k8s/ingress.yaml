@@ -60,7 +60,7 @@ spec:
   tls:
   - hosts:
     - cloud1c.dev-projects.goodwin.website
-    secretName: cloud1c-server-tls-secret
+    secretName: cloud1c-cluster-tls-secret
   rules:
   - host: cloud1c.dev-projects.goodwin.website
     http:
