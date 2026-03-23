@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud1c-front
+  namespace: dev-cloud1c
+  labels:
+    app: cloud1c-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud1c-front
+  template:
+    metadata:
+      labels:
+        app: cloud1c-front
+    spec:
+      # ВАЖНО: Доступ к приватному регистру
+      imagePullSecrets:
+        - name: registry-pull-secret
+      containers:
+        - name: cloud1c-front
+          # Тег тут не пишем, его подставит Kustomize из Jenkins
+          image: registry.goodwin.website/cloud1c-front
+          ports:
+            - containerPort: 80
+          # Переменные окружения (пример)
+          env:
+            - name: NODE_ENV
+              value: "production"
+          # Ограничения ресурсов
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+          # Проверка работоспособности (Healthcheck)
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10

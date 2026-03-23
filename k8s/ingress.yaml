@@ -1,0 +1,74 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cloud1c-front-ingress
+  namespace: dev-cloud1c
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - cloud1c-front.dev-projects.goodwin.website
+    secretName: cloud1c-front-tls-secret
+  rules:
+  - host: cloud1c-front.dev-projects.goodwin.website
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cloud1c-front-svc
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cloud1c-server-ingress
+  namespace: dev-cloud1c
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - cloud1c-server.dev-projects.goodwin.website
+    secretName: cloud1c-server-tls-secret
+  rules:
+  - host: cloud1c-server.dev-projects.goodwin.website
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cloud1c-server
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cloud1c-cluster-ingress
+  namespace: dev-cloud1c
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - cloud1c.dev-projects.goodwin.website
+    secretName: cloud1c-server-tls-secret
+  rules:
+  - host: cloud1c.dev-projects.goodwin.website
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cloud1c-cluster
+            port:
+              number: 80
